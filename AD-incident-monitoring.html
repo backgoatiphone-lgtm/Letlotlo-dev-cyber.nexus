@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Incident Monitoring</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Orbitron", sans-serif;
+        background: #020202;
+        color: #00ff99;
+        min-height: 100vh;
+      }
+
+      .page {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        padding: 24px 18px;
+        background: rgba(10, 10, 10, 0.95);
+        border-right: 1px solid rgba(0, 255, 153, 0.35);
+        box-shadow: 0 0 30px rgba(0, 255, 153, 0.2);
+      }
+
+      .sidebar h2 {
+        font-size: 24px;
+        margin-bottom: 12px;
+        text-shadow: 0 0 10px #00ff99;
+      }
+
+      .sidebar p {
+        color: #66ffcc;
+        font-size: 12px;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .sidebar button {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 12px 14px;
+        background: rgba(10, 10, 10, 0.85);
+        color: #00ff99;
+        border: 1px solid rgba(0, 255, 153, 0.35);
+        border-radius: 8px;
+        text-align: left;
+        cursor: pointer;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .sidebar button:hover,
+      .sidebar .active {
+        background: rgba(0, 255, 153, 0.12);
+        border-color: #00ff99;
+        box-shadow: 0 0 14px rgba(0, 255, 153, 0.25);
+      }
+
+      .content {
+        flex: 1;
+        padding: 30px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .topbar h1 {
+        font-size: 28px;
+        text-shadow: 0 0 10px rgba(0, 255, 153, 0.6);
+      }
+
+      .badge {
+        padding: 8px 14px;
+        background: rgba(0, 255, 153, 0.15);
+        border: 1px solid rgba(0, 255, 153, 0.4);
+        border-radius: 999px;
+        color: #66ffcc;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        background: rgba(10, 10, 10, 0.9);
+        border: 1px solid rgba(0, 255, 153, 0.25);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: 0 0 20px rgba(0, 255, 153, 0.12);
+      }
+
+      .card h3 {
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: #66ffcc;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .metric {
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .incident-list {
+        margin-top: 10px;
+      }
+
+      .incident-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .severity {
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .high {
+        background: rgba(255, 77, 77, 0.2);
+        color: #ff6b6b;
+      }
+
+      .medium {
+        background: rgba(255, 204, 77, 0.2);
+        color: #ffd166;
+      }
+
+      .low {
+        background: rgba(0, 255, 153, 0.2);
+        color: #00ff99;
+      }
+
+      @media (max-width: 900px) {
+        .stats {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <h2>Cyber Sentry</h2>
+        <p>Incident Center</p>
+        <button type="button" onclick="window.location.href='AD-dashboard.html'">Dashboard</button>
+        <button type="button" onclick="window.location.href='AD-Administration.html'">Administration</button>
+        <button type="button" onclick="window.location.href='AD-Analytics.html'">Analytics</button>
+        <button type="button" class="active" onclick="window.location.href='AD-incident-monitoring.html'">Incident Monitoring</button>
+        <button type="button" onclick="window.location.href='AD-Reports.html'">Reports</button>
+        <button type="button" onclick="window.location.href='AD-User-management.html'">User Management</button>
+      </aside>
+
+      <main class="content">
+        <div class="topbar">
+          <h1>Incident Monitoring</h1>
+          <div class="badge">Live security event tracking</div>
+        </div>
+
+        <section class="stats">
+          <div class="card">
+            <h3>Open Incidents</h3>
+            <div class="metric">11</div>
+          </div>
+          <div class="card">
+            <h3>Escalated</h3>
+            <div class="metric">4</div>
+          </div>
+          <div class="card">
+            <h3>Resolved</h3>
+            <div class="metric">29</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>Recent Incidents</h3>
+          <div class="incident-list">
+            <div class="incident-item">
+              <div>
+                <strong>Unauthorized VPN Login</strong><br />
+                <small>Detected 10 mins ago</small>
+              </div>
+              <span class="severity high">High</span>
+            </div>
+            <div class="incident-item">
+              <div>
+                <strong>Suspicious Data Transfer</strong><br />
+                <small>Detected 32 mins ago</small>
+              </div>
+              <span class="severity medium">Medium</span>
+            </div>
+            <div class="incident-item">
+              <div>
+                <strong>Failed MFA Attempts</strong><br />
+                <small>Detected 1 hr ago</small>
+              </div>
+              <span class="severity low">Low</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

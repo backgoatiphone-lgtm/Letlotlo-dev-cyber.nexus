@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Orbitron", sans-serif;
+        background: #020202;
+        color: #00ff99;
+        min-height: 100vh;
+      }
+
+      .page {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        padding: 24px 18px;
+        background: rgba(10, 10, 10, 0.95);
+        border-right: 1px solid rgba(0, 255, 153, 0.35);
+        box-shadow: 0 0 30px rgba(0, 255, 153, 0.2);
+      }
+
+      .sidebar h2 {
+        font-size: 24px;
+        margin-bottom: 12px;
+        text-shadow: 0 0 10px #00ff99;
+      }
+
+      .sidebar p {
+        color: #66ffcc;
+        font-size: 12px;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .sidebar button {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 12px 14px;
+        background: rgba(10, 10, 10, 0.85);
+        color: #00ff99;
+        border: 1px solid rgba(0, 255, 153, 0.35);
+        border-radius: 8px;
+        text-align: left;
+        cursor: pointer;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .sidebar button:hover,
+      .sidebar .active {
+        background: rgba(0, 255, 153, 0.12);
+        border-color: #00ff99;
+        box-shadow: 0 0 14px rgba(0, 255, 153, 0.25);
+      }
+
+      .content {
+        flex: 1;
+        padding: 30px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .topbar h1 {
+        font-size: 28px;
+        text-shadow: 0 0 10px rgba(0, 255, 153, 0.6);
+      }
+
+      .topbar .badge {
+        padding: 8px 14px;
+        background: rgba(0, 255, 153, 0.15);
+        border: 1px solid rgba(0, 255, 153, 0.4);
+        border-radius: 999px;
+        color: #66ffcc;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.9fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: rgba(10, 10, 10, 0.9);
+        border: 1px solid rgba(0, 255, 153, 0.25);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: 0 0 20px rgba(0, 255, 153, 0.12);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      th,
+      td {
+        padding: 12px 10px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      th {
+        color: #66ffcc;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .edit-btn {
+        padding: 8px 10px;
+        border: none;
+        border-radius: 8px;
+        background: #00ff99;
+        color: #020202;
+        cursor: pointer;
+        font-weight: 700;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      form {
+        display: grid;
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #66ffcc;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 255, 153, 0.35);
+        background: #0e0e0e;
+        color: #fff;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 6px;
+      }
+
+      .save-btn,
+      .cancel-btn {
+        padding: 10px 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 700;
+      }
+
+      .save-btn {
+        background: #00ff99;
+        color: #020202;
+      }
+
+      .cancel-btn {
+        background: transparent;
+        color: #00ff99;
+        border: 1px solid rgba(0, 255, 153, 0.35);
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <h2>Cyber Sentry</h2>
+        <p>Admin Panel</p>
+        <button type="button" onclick="window.location.href='AD-dashboard.html'">Dashboard</button>
+        <button type="button" class="active" onclick="window.location.href='AD-Administration.html'">Administration</button>
+        <button type="button" onclick="window.location.href='AD-User-management.html'">User Management</button>
+        <button type="button" onclick="window.location.href='AD-Analytics.html'">Analytics</button>
+        <button type="button" onclick="window.location.href='AD-Reports.html'">Reports</button>
+        <button type="button" onclick="window.location.href='AD-incident-monitoring.html'">Incidents</button>
+      </aside>
+
+      <main class="content">
+        <div class="topbar">
+          <h1>Admin Directory</h1>
+          <div class="badge">Manage and update admin profiles</div>
+        </div>
+
+        <div class="grid">
+          <section class="card">
+            <h3>Current Administrators</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody"></tbody>
+            </table>
+          </section>
+
+          <section class="card">
+            <h3>Modify Admin</h3>
+            <form id="adminForm">
+              <input type="hidden" id="adminId" />
+              <label>Name</label>
+              <input type="text" id="adminName" required />
+              <label>Email</label>
+              <input type="email" id="adminEmail" required />
+              <label>Role</label>
+              <select id="adminRole">
+                <option value="Super Admin">Super Admin</option>
+                <option value="Security Admin">Security Admin</option>
+                <option value="Operations Admin">Operations Admin</option>
+              </select>
+              <label>Status</label>
+              <select id="adminStatus">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <div class="form-actions">
+                <button type="submit" class="save-btn">Save Changes</button>
+                <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const admins = [
+        { id: 1, name: "Lerato Mokoena", email: "lerato@cybersentry.com", role: "Super Admin", status: "Active" },
+        { id: 2, name: "Sipho Nkosi", email: "sipho@cybersentry.com", role: "Security Admin", status: "Active" },
+        { id: 3, name: "Nadia Pillay", email: "nadia@cybersentry.com", role: "Operations Admin", status: "Inactive" }
+      ];
+
+      const tableBody = document.getElementById("adminTableBody");
+      const form = document.getElementById("adminForm");
+      const cancelBtn = document.getElementById("cancelBtn");
+
+      function renderAdmins() {
+        tableBody.innerHTML = "";
+
+        admins.forEach((admin) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${admin.name}</td>
+            <td>${admin.role}</td>
+            <td>${admin.status}</td>
+            <td><button class="edit-btn" type="button" onclick="editAdmin(${admin.id})">Edit</button></td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+
+      function editAdmin(id) {
+        const admin = admins.find((item) => item.id === id);
+        if (!admin) return;
+
+        document.getElementById("adminId").value = admin.id;
+        document.getElementById("adminName").value = admin.name;
+        document.getElementById("adminEmail").value = admin.email;
+        document.getElementById("adminRole").value = admin.role;
+        document.getElementById("adminStatus").value = admin.status;
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const id = Number(document.getElementById("adminId").value);
+        const admin = admins.find((item) => item.id === id);
+
+        if (admin) {
+          admin.name = document.getElementById("adminName").value;
+          admin.email = document.getElementById("adminEmail").value;
+          admin.role = document.getElementById("adminRole").value;
+          admin.status = document.getElementById("adminStatus").value;
+          renderAdmins();
+          form.reset();
+        }
+      });
+
+      cancelBtn.addEventListener("click", function () {
+        form.reset();
+      });
+
+      renderAdmins();
+    </script>
+  </body>
+</html>

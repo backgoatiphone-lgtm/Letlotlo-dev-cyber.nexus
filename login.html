@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyber Nuxes Login</title>
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #020202, #0f2f24);
+        color: #00ff99;
+      }
+
+      .card {
+        width: min(420px, 90vw);
+        padding: 28px;
+        border-radius: 18px;
+        background: rgba(10, 10, 10, 0.92);
+        border: 1px solid rgba(0, 255, 153, 0.3);
+        box-shadow: 0 0 24px rgba(0, 255, 153, 0.2);
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: 24px;
+      }
+
+      p {
+        margin-bottom: 20px;
+        color: #7dffd1;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 14px;
+      }
+
+      input {
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 255, 153, 0.4);
+        background: #0a0a0a;
+        color: #fff;
+      }
+
+      button {
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background: #00ff99;
+        color: #000;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .hint {
+        margin-top: 12px;
+        font-size: 12px;
+        color: #7dffd1;
+      }
+
+      .link-row {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #7dffd1;
+      }
+
+      .link-row a {
+        color: #00ff99;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Cyber Nuxes</h1>
+      <p>Secure access portal</p>
+      <form id="loginForm">
+        <label>
+          Username
+          <input type="text" id="username" placeholder="Enter username" required />
+        </label>
+        <label>
+          Password
+          <input type="password" id="password" placeholder="Enter password" required />
+        </label>
+        <button type="submit">Sign In</button>
+      </form>
+      <div class="link-row">
+        New student? <a href="signup.html">Create an account</a>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("loginForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const storedUsers = JSON.parse(localStorage.getItem("cyberNuxesUsers") || "[]");
+        const matchedUser = storedUsers.find((user) => user.username.toLowerCase() === username.toLowerCase());
+
+        if (username === "admin" && password === "admin123") {
+          window.location.href = "AD-dashboard.html";
+        } else if (matchedUser && matchedUser.password === password) {
+          window.location.href = "student-dashboard.html";
+        } else {
+          alert("Invalid credentials. Use admin/admin123 or create a student account.");
+        }
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("signup") === "success") {
+        alert("Account created successfully. You can now sign in.");
+      }
+    </script>
+  </body>
+</html>

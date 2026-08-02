@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Learning Portal</title>
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #020202, #0f2f24);
+        color: #00ff99;
+        min-height: 100vh;
+      }
+
+      .page {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: rgba(8, 8, 8, 0.95);
+        border-right: 1px solid rgba(0, 255, 153, 0.3);
+        padding: 24px 16px;
+      }
+
+      .sidebar h2 {
+        font-size: 20px;
+        margin-bottom: 16px;
+      }
+
+      .sidebar a {
+        display: block;
+        color: #7dffd1;
+        text-decoration: none;
+        padding: 10px 12px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        border: 1px solid transparent;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        background: rgba(0, 255, 153, 0.12);
+        border-color: rgba(0, 255, 153, 0.3);
+        color: #00ff99;
+      }
+
+      .content {
+        flex: 1;
+        padding: 24px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(10, 10, 10, 0.92);
+        border: 1px solid rgba(0, 255, 153, 0.3);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 0 24px rgba(0, 255, 153, 0.2);
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: 28px;
+      }
+
+      p {
+        color: #7dffd1;
+        margin-bottom: 20px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 20px;
+      }
+
+      .panel {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(0,255,153,0.2);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .lesson-list button,
+      .assessment-link {
+        width: 100%;
+        text-align: left;
+        border: 1px solid rgba(0,255,153,0.25);
+        background: transparent;
+        color: #00ff99;
+        padding: 10px 12px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        cursor: pointer;
+      }
+
+      .lesson-list button.active,
+      .assessment-link.active {
+        background: rgba(0, 255, 153, 0.14);
+      }
+
+      .assessment-list {
+        margin-top: 12px;
+      }
+
+      .assessment-card {
+        padding: 10px 0;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .assessment-card h3 {
+        margin-bottom: 6px;
+      }
+
+      .option-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .option-list label {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #caffef;
+      }
+
+      .submit-btn {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: none;
+        background: #00ff99;
+        color: #000;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .lesson-content h2 {
+        margin-bottom: 10px;
+      }
+
+      .lesson-content .meta {
+        color: #7dffd1;
+        margin-bottom: 12px;
+      }
+
+      .tutorial-box {
+        margin-top: 16px;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #000;
+        border: 1px solid rgba(0,255,153,0.2);
+      }
+
+      iframe {
+        width: 100%;
+        min-height: 320px;
+        border: 0;
+      }
+
+      .empty-state {
+        color: #7dffd1;
+        font-size: 14px;
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <h2>Cyber Nuxes</h2>
+        <a href="student-dashboard.html">Dashboard</a>
+        <a href="student-learning.html" class="active">My Lessons</a>
+        <a href="student-My-Tests.html">My Tests</a>
+        <a href="student-My-Exams.html">My Exams</a>
+        <a href="student-My-Results.html">My Results</a>
+        <a href="student-My-Certificates.html">My Certificates</a>
+        <a href="login.html">Logout</a>
+      </aside>
+
+      <div class="content">
+        <div class="container">
+          <h1>Student Learning Portal</h1>
+          <p>Browse lessons and watch the related tutorials for each topic.</p>
+
+          <div class="layout">
+            <section class="panel">
+              <h2>Learning Content</h2>
+              <div class="btn-row" style="margin-top: 0; margin-bottom: 12px;">
+                <button type="button" class="submit-btn" onclick="showLessonByType('test')">Test</button>
+                <button type="button" class="submit-btn" onclick="showLessonByType('exam')">Exam</button>   
+              </div>
+              <div id="lessonList" class="lesson-list"></div>
+            </section>
+
+            <section class="panel lesson-content" id="lessonContent">
+              <div class="empty-state">Select a lesson to begin learning.</div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const lessonList = document.getElementById("lessonList");
+      const lessonContent = document.getElementById("lessonContent");
+      const storedCourses = JSON.parse(localStorage.getItem("cyberNuxesCourses") || "[]");
+      const lessons = storedCourses.flatMap((course) => (course.lessons || []).map((lesson) => ({
+        type: "lesson",
+        courseTitle: course.title,
+        title: lesson.title,
+        content: lesson.content || "No lesson notes yet.",
+        videoUrl: lesson.videoUrl || ""
+      })));
+      const tests = storedCourses.flatMap((course) => (course.tests || []).map((test) => ({
+        type: "test",
+        courseTitle: course.title,
+        title: test.title,
+        question: test.question || "No question provided.",
+        options: test.options || [],
+        answer: test.answer || ""
+      })));
+      const exams = storedCourses.flatMap((course) => (course.exams || []).map((exam) => ({
+        type: "exam",
+        courseTitle: course.title,
+        title: exam.title,
+        instructions: exam.instructions || "Complete the exam questions below.",
+        questions: exam.questions || [],
+        passingScore: exam.passingScore || 60
+      })));
+
+      const learningItems = [...lessons, ...tests, ...exams];
+
+      function renderLessons() {
+        if (!learningItems.length) {
+          lessonList.innerHTML = '<div class="empty-state">No lessons, tests, or exams are available yet.</div>';
+          return;
+        }
+
+        lessonList.innerHTML = learningItems.map((item, index) => `
+          <button type="button" class="${index === 0 ? "active" : ""}" onclick="showLesson(${index})">
+            ${item.type === "lesson" ? "📘" : item.type === "test" ? "📝" : "🧪"} ${item.title}
+          </button>
+        `).join("");
+
+        showLesson(0);
+      }
+
+      function showLesson(index) {
+        const item = learningItems[index];
+        if (!item) return;
+
+        const buttons = lessonList.querySelectorAll("button");
+        buttons.forEach((btn, btnIndex) => {
+          btn.classList.toggle("active", btnIndex === index);
+        });
+
+        if (item.type === "lesson") {
+          lessonContent.innerHTML = `
+            <h2>${item.title}</h2>
+            <div class="meta">Course: ${item.courseTitle}</div>
+            <p>${item.content}</p>
+            ${item.videoUrl ? `
+              <div class="tutorial-box">
+                <iframe src="${item.videoUrl}" allowfullscreen></iframe>
+              </div>
+            ` : '<div class="empty-state">No tutorial video is available for this lesson yet.</div>'}
+          `;
+          return;
+        }
+
+        if (item.type === "test") {
+          lessonContent.innerHTML = `
+            <h2>${item.title}</h2>
+            <div class="meta">Course: ${item.courseTitle}</div>
+            <p>${item.question}</p>
+            <div class="option-list">
+              ${item.options.map((option) => `<label><input type="radio" name="testOption" /> ${option}</label>`).join("")}
+            </div>
+            <button class="submit-btn" type="button">Submit Test</button>
+          `;
+          return;
+        }
+
+        lessonContent.innerHTML = `
+          <h2>${item.title}</h2>
+          <div class="meta">Course: ${item.courseTitle} • Passing score: ${item.passingScore}%</div>
+          <p>${item.instructions}</p>
+          <div class="assessment-list">
+            ${item.questions.map((question) => `<div class="assessment-card"><h3>${question}</h3><p>Write your answer below.</p></div>`).join("")}
+          </div>
+          <button class="submit-btn" type="button">Submit Exam</button>
+        `;
+      }
+
+      function showLessonByType(type) {
+        const index = learningItems.findIndex((item) => item.type === type);
+        if (index >= 0) {
+          showLesson(index);
+        }
+      }
+
+      window.showLesson = showLesson;
+      window.showLessonByType = showLessonByType;
+      renderLessons();
+
+        if (item.type === "lesson") {
+          lessonContent.innerHTML = `
+            <h2>${item.title}</h2>
+            <div class="meta">Course: ${item.courseTitle}</div>
+            <p>${item.content}</p>
+            ${item.videoUrl ? `
+              <div class="tutorial-box">
+                <iframe src="${item.videoUrl}" allowfullscreen></iframe>
+              </div>
+            ` : '<div class="empty-state">No tutorial video is available for this lesson yet.</div>'}
+          `;
+          return;
+        }
+
+        if (item.type === "test") {
+          lessonContent.innerHTML = `
+            <h2>${item.title}</h2>
+            <div class="meta">Course: ${item.courseTitle}</div>
+            <p>${item.question}</p>
+            <div class="option-list">
+              ${item.options.map((option) => `<label><input type="radio" name="testOption" /> ${option}</label>`).join("")}
+            </div>
+            <button class="submit-btn" type="button">Submit Test</button>
+          `;
+          return;
+        }
+
+        lessonContent.innerHTML = `
+          <h2>${item.title}</h2>
+          <div class="meta">Course: ${item.courseTitle} • Passing score: ${item.passingScore}%</div>
+          <p>${item.instructions}</p>
+          <div class="assessment-list">
+            ${item.questions.map((question) => `<div class="assessment-card"><h3>${question}</h3><p>Write your answer below.</p></div>`).join("")}
+          </div>
+          <button class="submit-btn" type="button">Submit Exam</button>
+        `;
+      
+
+      window.showLesson = showLesson;
+      renderLessons();
+    </script>
+  </body>
+</html>

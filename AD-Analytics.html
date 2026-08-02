@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Orbitron", sans-serif;
+        background: #020202;
+        color: #00ff99;
+        min-height: 100vh;
+      }
+
+      .page {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        padding: 24px 18px;
+        background: rgba(10, 10, 10, 0.95);
+        border-right: 1px solid rgba(0, 255, 153, 0.35);
+        box-shadow: 0 0 30px rgba(0, 255, 153, 0.2);
+      }
+
+      .sidebar h2 {
+        font-size: 24px;
+        margin-bottom: 12px;
+        text-shadow: 0 0 10px #00ff99;
+      }
+
+      .sidebar p {
+        color: #66ffcc;
+        font-size: 12px;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .sidebar button {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 12px 14px;
+        background: rgba(10, 10, 10, 0.85);
+        color: #00ff99;
+        border: 1px solid rgba(0, 255, 153, 0.35);
+        border-radius: 8px;
+        text-align: left;
+        cursor: pointer;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .sidebar button:hover,
+      .sidebar .active {
+        background: rgba(0, 255, 153, 0.12);
+        border-color: #00ff99;
+        box-shadow: 0 0 14px rgba(0, 255, 153, 0.25);
+      }
+
+      .content {
+        flex: 1;
+        padding: 30px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .topbar h1 {
+        font-size: 28px;
+        text-shadow: 0 0 10px rgba(0, 255, 153, 0.6);
+      }
+
+      .badge {
+        padding: 8px 14px;
+        background: rgba(0, 255, 153, 0.15);
+        border: 1px solid rgba(0, 255, 153, 0.4);
+        border-radius: 999px;
+        color: #66ffcc;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .student-section {
+        margin-top: 20px;
+      }
+
+      .student-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-top: 12px;
+      }
+
+      .student-card {
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(0, 255, 153, 0.08);
+        border: 1px solid rgba(0, 255, 153, 0.25);
+      }
+
+      .student-card .value {
+        font-size: 24px;
+        font-weight: 700;
+        margin-top: 6px;
+      }
+
+      .student-card .label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #66ffcc;
+      }
+
+      .card {
+        background: rgba(10, 10, 10, 0.9);
+        border: 1px solid rgba(0, 255, 153, 0.25);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: 0 0 20px rgba(0, 255, 153, 0.12);
+      }
+
+      .card h3 {
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: #66ffcc;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .metric {
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .chart-area {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 20px;
+      }
+
+      .bar-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        height: 220px;
+        margin-top: 16px;
+      }
+
+      .bar {
+        flex: 1;
+        background: linear-gradient(180deg, #00ff99, #006644);
+        border-radius: 8px 8px 0 0;
+        position: relative;
+      }
+
+      .bar span {
+        position: absolute;
+        bottom: -24px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        color: #66ffcc;
+      }
+
+      ul {
+        list-style: none;
+        margin-top: 10px;
+      }
+
+      li {
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      @media (max-width: 900px) {
+        .stats,
+        .chart-area {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <h2>Cyber Sentry</h2>
+        <p>Analytics Hub</p>
+        <button type="button" onclick="window.location.href='AD-dashboard.html'">Dashboard</button>
+        <button type="button" onclick="window.location.href='AD-Administration.html'">Administration</button>
+        <button type="button" class="active" onclick="window.location.href='AD-Analytics.html'">Analytics</button>
+        <button type="button" onclick="window.location.href='AD-Reports.html'">Reports</button>
+        <button type="button" onclick="window.location.href='AD-incident-monitoring.html'">Incidents</button>
+        <button type="button" onclick="window.location.href='AD-User-management.html'">User Management</button>
+      </aside>
+
+      <main class="content">
+        <div class="topbar">
+          <h1>Admin Analytics</h1>
+          <div class="badge">Real-time security insights</div>
+        </div>
+
+        <section class="stats">
+          <div class="card">
+            <h3>Active Admins</h3>
+            <div class="metric">18</div>
+          </div>
+          <div class="card">
+            <h3>Pending Actions</h3>
+            <div class="metric">7</div>
+          </div>
+          <div class="card">
+            <h3>Security Alerts</h3>
+            <div class="metric">12</div>
+          </div>
+          <div class="card">
+            <h3>Resolved Today</h3>
+            <div class="metric">24</div>
+          </div>
+        </section>
+
+        <section class="chart-area">
+          <div class="card">
+            <h3>Weekly Admin Activity</h3>
+            <div class="bar-chart">
+              <div class="bar" style="height: 80%"><span>Mon</span></div>
+              <div class="bar" style="height: 95%"><span>Tue</span></div>
+              <div class="bar" style="height: 70%"><span>Wed</span></div>
+              <div class="bar" style="height: 88%"><span>Thu</span></div>
+              <div class="bar" style="height: 100%"><span>Fri</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Top Admin Tasks</h3>
+            <ul>
+              <li>Review threat logs</li>
+              <li>Approve user access</li>
+              <li>Investigate alerts</li>
+              <li>Update incident reports</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="student-section card">
+          <h3>Student Section</h3>
+          <div class="student-grid">
+            <div class="student-card">
+              <div class="label">Enrolled Students</div>
+              <div class="value">124</div>
+            </div>
+            <div class="student-card">
+              <div class="label">Active Learners</div>
+              <div class="value">86</div>
+            </div>
+            <div class="student-card">
+              <div class="label">Course Completion</div>
+              <div class="value">67%</div>
+            </div>
+            <div class="student-card">
+              <div class="label">Avg. Exam Score</div>
+              <div class="value">81</div>
+            </div>
+          </div>
+
+          <ul style="margin-top: 14px;">
+            <li>Student A completed the latest lesson module.</li>
+            <li>Student B passed the security fundamentals exam.</li>
+            <li>Student C is currently active in the networking course.</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

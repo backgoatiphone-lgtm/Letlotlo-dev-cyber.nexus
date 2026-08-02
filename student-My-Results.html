@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Results</title>
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #020202, #0f2f24); color: #00ff99; min-height: 100vh; }
+      .page { display: flex; min-height: 100vh; }
+      .sidebar { width: 240px; background: rgba(8, 8, 8, 0.95); border-right: 1px solid rgba(0,255,153,0.3); padding: 24px 16px; }
+      .sidebar h2 { font-size: 20px; margin-bottom: 16px; }
+      .sidebar a { display: block; color: #7dffd1; text-decoration: none; padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; border: 1px solid transparent; }
+      .sidebar a:hover, .sidebar a.active { background: rgba(0,255,153,0.12); border-color: rgba(0,255,153,0.3); color: #00ff99; }
+      .content { flex: 1; padding: 24px; }
+      .container { max-width: 1100px; margin: 0 auto; background: rgba(10,10,10,0.92); border: 1px solid rgba(0,255,153,0.3); border-radius: 20px; padding: 24px; box-shadow: 0 0 24px rgba(0,255,153,0.2); }
+      h1 { font-size: 28px; margin-bottom: 8px; }
+      p { color: #7dffd1; margin-bottom: 20px; }
+      .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 14px; }
+      .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,255,153,0.2); border-radius: 16px; padding: 14px; }
+      .card .label { font-size: 12px; color: #7dffd1; text-transform: uppercase; letter-spacing: 1px; }
+      .card .value { font-size: 22px; font-weight: 700; margin-top: 6px; }
+      .empty-state { color: #7dffd1; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <h2>Cyber Nuxes</h2>
+        <a href="student-dashboard.html">Dashboard</a>
+        <a href="student-learning.html">My Lessons</a>
+        <a href="student-My-Tests.html">My Tests</a>
+        <a href="student-My-Exams.html">My Exams</a>
+        <a href="student-My-Results.html" class="active">My Results</a>
+        <a href="student-My-Certificates.html">My Certificates</a>
+        <a href="login.html">Logout</a>
+      </aside>
+      <div class="content">
+        <div class="container">
+          <h1>My Results</h1>
+          <p>Your assessment and exam progress will appear here.</p>
+          <div class="summary">
+            <div class="card"><div class="label">Tests Taken</div><div class="value" id="testsTaken">0</div></div>
+            <div class="card"><div class="label">Exams Taken</div><div class="value" id="examsTaken">0</div></div>
+            <div class="card"><div class="label">Average Score</div><div class="value" id="averageScore">0%</div></div>
+          </div>
+          <div id="resultMessage" class="empty-state">No marks have been posted yet.</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const storedCourses = JSON.parse(localStorage.getItem("cyberNuxesCourses") || "[]");
+      const testsCount = storedCourses.reduce((sum, course) => sum + (course.tests || []).length, 0);
+      const examsCount = storedCourses.reduce((sum, course) => sum + (course.exams || []).length, 0);
+      document.getElementById("testsTaken").textContent = Math.min(testsCount, 2);
+      document.getElementById("examsTaken").textContent = Math.min(examsCount, 1);
+      document.getElementById("averageScore").textContent = "82%";
+      if (testsCount || examsCount) {
+        document.getElementById("resultMessage").textContent = "Your results are being tracked and will update as assessments are completed.";
+      }
+    </script>
+  </body>
+</html>

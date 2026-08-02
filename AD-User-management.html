@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Orbitron", sans-serif;
+        background: #020202;
+        color: #00ff99;
+        min-height: 100vh;
+      }
+
+      .page {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        padding: 24px 18px;
+        background: rgba(10, 10, 10, 0.95);
+        border-right: 1px solid rgba(0, 255, 153, 0.35);
+        box-shadow: 0 0 30px rgba(0, 255, 153, 0.2);
+      }
+
+      .sidebar h2 {
+        font-size: 24px;
+        margin-bottom: 8px;
+        text-shadow: 0 0 10px #00ff99;
+      }
+
+      .sidebar p {
+        color: #66ffcc;
+        font-size: 12px;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .sidebar button {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 12px 14px;
+        background: rgba(10, 10, 10, 0.85);
+        color: #00ff99;
+        border: 1px solid rgba(0, 255, 153, 0.35);
+        border-radius: 8px;
+        text-align: left;
+        cursor: pointer;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .sidebar button:hover,
+      .sidebar .active {
+        background: rgba(0, 255, 153, 0.12);
+        border-color: #00ff99;
+        box-shadow: 0 0 14px rgba(0, 255, 153, 0.25);
+      }
+
+      .content {
+        flex: 1;
+        padding: 30px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .topbar h1 {
+        font-size: 28px;
+        text-shadow: 0 0 10px rgba(0, 255, 153, 0.6);
+      }
+
+      .badge {
+        padding: 8px 14px;
+        background: rgba(0, 255, 153, 0.15);
+        border: 1px solid rgba(0, 255, 153, 0.4);
+        border-radius: 999px;
+        color: #66ffcc;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: rgba(10, 10, 10, 0.9);
+        border: 1px solid rgba(0, 255, 153, 0.25);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: 0 0 20px rgba(0, 255, 153, 0.12);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 13px;
+      }
+
+      form {
+        display: grid;
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #66ffcc;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 255, 153, 0.35);
+        background: #0e0e0e;
+        color: #fff;
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .save-btn {
+        padding: 10px 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 700;
+        background: #00ff99;
+        color: #020202;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <h2>Cyber Sentry</h2>
+        <p>Access Control</p>
+        <button type="button" onclick="window.location.href='AD-dashboard.html'">Dashboard</button>
+        <button type="button" onclick="window.location.href='AD-Administration.html'">Administration</button>
+        <button type="button" class="active" onclick="window.location.href='AD-User-management.html'">User Management</button>
+        <button type="button" onclick="window.location.href='AD-Analytics.html'">Analytics</button>
+        <button type="button" onclick="window.location.href='AD-Reports.html'">Reports</button>
+        <button type="button" onclick="window.location.href='AD-incident-monitoring.html'">Incidents</button>
+      </aside>
+
+      <main class="content">
+        <div class="topbar">
+          <h1>User Management</h1>
+          <div class="badge">Control role-based access across the platform</div>
+        </div>
+
+        <div class="grid">
+          <section class="card">
+            <h3>Active Accounts</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Leah Johnson</td>
+                  <td>Analyst</td>
+                  <td>Active</td>
+                </tr>
+                <tr>
+                  <td>Michael Singh</td>
+                  <td>Operator</td>
+                  <td>Pending</td>
+                </tr>
+                <tr>
+                  <td>Ana Moyo</td>
+                  <td>Admin</td>
+                  <td>Active</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="card">
+            <h3>Update User Access</h3>
+            <form>
+              <label>
+                Name
+                <input type="text" value="Leah Johnson" />
+              </label>
+              <label>
+                Role
+                <select>
+                  <option>Analyst</option>
+                  <option>Operator</option>
+                  <option>Admin</option>
+                </select>
+              </label>
+              <label>
+                Status
+                <select>
+                  <option>Active</option>
+                  <option>Pending</option>
+                  <option>Disabled</option>
+                </select>
+              </label>
+              <button class="save-btn" type="submit">Save Changes</button>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

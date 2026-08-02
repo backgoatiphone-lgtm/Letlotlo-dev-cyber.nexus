@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Management</title>
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #020202, #0f2f24);
+        color: #00ff99;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .page {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: rgba(8, 8, 8, 0.95);
+        border-right: 1px solid rgba(0, 255, 153, 0.3);
+        padding: 24px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .sidebar h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .sidebar a {
+        color: #7dffd1;
+        text-decoration: none;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        transition: 0.3s ease;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        background: rgba(0, 255, 153, 0.14);
+        border-color: rgba(0, 255, 153, 0.3);
+        color: #00ff99;
+      }
+
+      .content {
+        flex: 1;
+        padding: 24px;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: rgba(10, 10, 10, 0.92);
+        border: 1px solid rgba(0, 255, 153, 0.3);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 0 24px rgba(0, 255, 153, 0.2);
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: 28px;
+      }
+
+      p {
+        margin-bottom: 20px;
+        color: #7dffd1;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .analytics-card {
+        padding: 12px;
+        border-radius: 12px;
+        background: rgba(0, 255, 153, 0.08);
+        border: 1px solid rgba(0, 255, 153, 0.2);
+      }
+
+      .analytics-card .value {
+        font-size: 20px;
+        font-weight: 700;
+        margin-top: 4px;
+      }
+
+      .analytics-card .label {
+        font-size: 12px;
+        color: #7dffd1;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .panel {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(0,255,153,0.2);
+        border-radius: 16px;
+        padding: 18px;
+      }
+
+      .panel h2,
+      .panel h3 {
+        margin-bottom: 10px;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+
+      input, textarea, select {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(0,255,153,0.35);
+        background: #0a0a0a;
+        color: #fff;
+      }
+
+      textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+
+      button {
+        padding: 10px 14px;
+        border: none;
+        border-radius: 10px;
+        background: #00ff99;
+        color: #000;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 6px;
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #00ff99;
+        border: 1px solid rgba(0,255,153,0.35);
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid rgba(0,255,153,0.16);
+        margin: 16px 0;
+      }
+
+      .course-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .course-item {
+        padding: 12px;
+        border-radius: 12px;
+        background: rgba(0,255,153,0.06);
+        border: 1px solid rgba(0,255,153,0.14);
+      }
+
+      .course-item strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .course-item .meta {
+        font-size: 13px;
+        color: #7dffd1;
+        margin-bottom: 8px;
+      }
+
+      .item-list {
+        margin-top: 10px;
+        padding-left: 16px;
+        color: #bfffe0;
+      }
+
+      .item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+
+      .item-row button {
+        margin-top: 0;
+        padding: 6px 10px;
+      }
+
+      .section-title {
+        margin-top: 10px;
+        font-size: 13px;
+        color: #00ff99;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .empty-state {
+        color: #7dffd1;
+        font-size: 13px;
+      }
+
+      @media (max-width: 800px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <h2>Cyber Nuxes</h2>
+        <a href="AD-dashboard.html">Dashboard</a>
+        <a href="AD-Analytics.html">Analytics</a>
+        <a href="AD-Reports.html">Reports</a>
+        <a href="AD-course-management.html" class="active">Course Manager</a>
+        <a href="login.html">Logout</a>
+      </aside>
+
+      <div class="content">
+        <div class="container">
+          <h1>Learning Content Manager</h1>
+          <p>Create courses, manage lessons, add tests, and build exams.</p>
+
+          <div class="grid">
+            <section class="panel">
+              <h2>Course Details</h2>
+              <form id="courseForm">
+                <label>
+                  Course Title
+                  <input type="text" id="courseTitle" required />
+                </label>
+                <label>
+                  Category
+                  <select id="courseCategory">
+                    <option value="Cyber Security">Cyber Security</option>
+                    <option value="Networking">Networking</option>
+                    <option value="Programming">Programming</option>
+                    <option value="Cloud">Cloud</option>
+                  </select>
+                </label>
+                <label>
+                  Description
+                  <textarea id="courseDescription"></textarea>
+                </label>
+                <button type="submit">Save Course</button>
+              </form>
+
+              <hr />
+
+              <h3>Add / Edit Lesson</h3>
+              <form id="lessonForm">
+                <label>
+                  Lesson Title
+                  <input type="text" id="lessonTitle" required />
+                </label>
+                <label>
+                  Lesson Content
+                  <textarea id="lessonContent"></textarea>
+                </label>
+                <label>
+                  Tutorial Video URL
+                  <input type="text" id="lessonVideoUrl" placeholder="https://..." />
+                </label>
+                <button type="submit">Save Lesson</button>
+              </form>
+
+              <hr />
+
+              <h3>Add / Edit Test</h3>
+              <form id="testForm">
+                <label>
+                  Test Title
+                  <input type="text" id="testTitle" required />
+                </label>
+                <label>
+                  Question
+                  <textarea id="testQuestion"></textarea>
+                </label>
+                <label>
+                  Options (comma separated)
+                  <input type="text" id="testOptions" placeholder="A, B, C, D" />
+                </label>
+                <label>
+                  Correct Answer
+                  <input type="text" id="testAnswer" placeholder="B" />
+                </label>
+                <button type="submit">Save Test</button>
+              </form>
+
+              <hr />
+
+              <h3>Add / Edit Exam</h3>
+              <form id="examForm">
+                <label>
+                  Exam Title
+                  <input type="text" id="examTitle" required />
+                </label>
+                <label>
+                  Instructions
+                  <textarea id="examInstructions"></textarea>
+                </label>
+                <label>
+                  Passing Score
+                  <input type="number" id="examScore" min="1" max="100" value="60" />
+                </label>
+                <label>
+                  Questions (one per line)
+                  <textarea id="examQuestions" placeholder="Question 1&#10;Question 2"></textarea>
+                </label>
+                <button type="submit">Save Exam</button>
+              </form>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Existing Courses</h2>
+                <select id="courseSelector"></select>
+              </div>
+              <ul id="courseList" class="course-list"></ul>
+            </section>
+          </div>
+
+          <section class="panel" style="margin-top: 20px;">
+            <h2>Student Analytics</h2>
+            <p>Monitor student engagement, lesson completion, and exam readiness.</p>
+            <div class="analytics-grid">
+              <div class="analytics-card">
+                <div class="label">Active Students</div>
+                <div class="value" id="activeStudents">24</div>
+              </div>
+              <div class="analytics-card">
+                <div class="label">Lessons Completed</div>
+                <div class="value" id="lessonsCompleted">86%</div>
+              </div>
+              <div class="analytics-card">
+                <div class="label">Exam Pass Rate</div>
+                <div class="value" id="examPassRate">72%</div>
+              </div>
+              <div class="analytics-card">
+                <div class="label">Avg. Score</div>
+                <div class="value" id="avgScore">81</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+              <h3>Recent Student Activity</h3>
+              <ul class="item-list" id="studentActivityList"></ul>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const courseForm = document.getElementById("courseForm");
+      const lessonForm = document.getElementById("lessonForm");
+      const testForm = document.getElementById("testForm");
+      const examForm = document.getElementById("examForm");
+      const courseList = document.getElementById("courseList");
+      const courseSelector = document.getElementById("courseSelector");
+      const studentActivityList = document.getElementById("studentActivityList");
+      const storageKey = "cyberNuxesCourses";
+
+      let courses = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      let currentCourseIndex = courses.length ? 0 : -1;
+
+      function populateCourseSelector() {
+        courseSelector.innerHTML = '<option value="-1">Select a course</option>' + courses.map((course, index) => `
+          <option value="${index}" ${index === currentCourseIndex ? "selected" : ""}>${course.title}</option>
+        `).join("");
+      }
+
+      function renderStudentAnalytics() {
+        const activity = [
+          { name: "A. Mokoena", action: "Completed Lesson 4", status: "On Track" },
+          { name: "J. Singh", action: "Passed Exam 2", status: "Excellent" },
+          { name: "T. Smith", action: "Started New Course", status: "In Progress" },
+          { name: "L. Gomez", action: "Viewed Tutorial", status: "Engaged" }
+        ];
+
+        studentActivityList.innerHTML = activity.map((item) => `
+          <li class="item-row">
+            <span><strong>${item.name}</strong> — ${item.action}</span>
+            <span class="empty-state">${item.status}</span>
+          </li>
+        `).join("");
+      }
+
+      function renderCourses() {
+        populateCourseSelector();
+
+        if (!courses.length) {
+          courseList.innerHTML = "<li class='course-item'><strong>No courses added yet.</strong><div class='empty-state'>Create a course and then add lessons, tests, and exams.</div></li>";
+          return;
+        }
+
+        courseList.innerHTML = courses.map((course, index) => `
+          <li class="course-item">
+            <strong>${course.title}</strong>
+            <div class="meta">${course.category} • ${course.description || "No description"}</div>
+
+            <div class="section-title">Lessons</div>
+            <ul class="item-list">
+              ${(course.lessons || []).length ? (course.lessons || []).map((lesson, lessonIndex) => `
+                <li class="item-row">
+                  <span>${lesson.title || "Untitled lesson"}</span>
+                  <div>
+                    <button type="button" class="btn-secondary" onclick="editLesson(${index}, ${lessonIndex})">Edit</button>
+                    <button type="button" class="btn-secondary" onclick="removeLesson(${index}, ${lessonIndex})">Remove</button>
+                  </div>
+                </li>
+              `).join("") : "<li class='empty-state'>No lessons yet.</li>"}
+            </ul>
+
+            <div class="section-title">Tests</div>
+            <ul class="item-list">
+              ${(course.tests || []).length ? (course.tests || []).map((test, testIndex) => `
+                <li class="item-row">
+                  <span>${test.title || "Untitled test"}</span>
+                  <div>
+                    <button type="button" class="btn-secondary" onclick="editTest(${index}, ${testIndex})">Edit</button>
+                    <button type="button" class="btn-secondary" onclick="removeTest(${index}, ${testIndex})">Remove</button>
+                  </div>
+                </li>
+              `).join("") : "<li class='empty-state'>No tests yet.</li>"}
+            </ul>
+
+            <div class="section-title">Exams</div>
+            <ul class="item-list">
+              ${(course.exams || []).length ? (course.exams || []).map((exam, examIndex) => `
+                <li class="item-row">
+                  <span>${exam.title || "Untitled exam"}</span>
+                  <div>
+                    <button type="button" class="btn-secondary" onclick="editExam(${index}, ${examIndex})">Edit</button>
+                    <button type="button" class="btn-secondary" onclick="removeExam(${index}, ${examIndex})">Remove</button>
+                  </div>
+                </li>
+              `).join("") : "<li class='empty-state'>No exams yet.</li>"}
+            </ul>
+
+            <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" onclick="selectCourse(${index})">Select</button>
+              <button type="button" class="btn-secondary" onclick="editCourse(${index})">Edit</button>
+              <button type="button" class="btn-secondary" onclick="deleteCourse(${index})">Delete</button>
+            </div>
+          </li>
+        `).join("");
+      }
+
+      function saveCourses() {
+        localStorage.setItem(storageKey, JSON.stringify(courses));
+        renderCourses();
+      }
+
+      function resetCourseForm() {
+        courseForm.reset();
+        delete courseForm.dataset.editIndex;
+        document.getElementById("courseTitle").focus();
+      }
+
+      function resetLessonForm() {
+        lessonForm.reset();
+        delete lessonForm.dataset.editLessonIndex;
+      }
+
+      function resetTestForm() {
+        testForm.reset();
+        delete testForm.dataset.editTestIndex;
+      }
+
+      function resetExamForm() {
+        examForm.reset();
+        delete examForm.dataset.editExamIndex;
+      }
+
+      courseForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const title = document.getElementById("courseTitle").value.trim();
+        const category = document.getElementById("courseCategory").value;
+        const description = document.getElementById("courseDescription").value.trim();
+
+        if (!title) return;
+
+        const existingIndex = Number(courseForm.dataset.editIndex);
+        if (existingIndex >= 0 && courses[existingIndex]) {
+          courses[existingIndex] = {
+            ...courses[existingIndex],
+            title,
+            category,
+            description,
+          };
+          currentCourseIndex = existingIndex;
+        } else {
+          courses.push({ title, category, description, lessons: [], tests: [], exams: [] });
+          currentCourseIndex = courses.length - 1;
+        }
+
+        saveCourses();
+        resetCourseForm();
+      });
+
+      lessonForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const activeCourse = getActiveCourse();
+        if (!activeCourse) {
+          alert("Please select a course first.");
+          return;
+        }
+
+        const title = document.getElementById("lessonTitle").value.trim();
+        const content = document.getElementById("lessonContent").value.trim();
+        const videoUrl = document.getElementById("lessonVideoUrl").value.trim();
+
+        if (!title) return;
+
+        const lessonData = { title, content, videoUrl };
+        const editIndex = Number(lessonForm.dataset.editLessonIndex);
+
+        if (editIndex >= 0 && activeCourse.lessons?.[editIndex]) {
+          activeCourse.lessons[editIndex] = lessonData;
+        } else {
+          activeCourse.lessons = activeCourse.lessons || [];
+          activeCourse.lessons.push(lessonData);
+        }
+
+        saveCourses();
+        resetLessonForm();
+      });
+
+      testForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const activeCourse = getActiveCourse();
+        if (!activeCourse) {
+          alert("Please select a course first.");
+          return;
+        }
+
+        const title = document.getElementById("testTitle").value.trim();
+        const question = document.getElementById("testQuestion").value.trim();
+        const options = document.getElementById("testOptions").value.split(",").map((option) => option.trim()).filter(Boolean);
+        const answer = document.getElementById("testAnswer").value.trim();
+
+        if (!title || !question) return;
+
+        const testData = { title, question, options, answer };
+        const editIndex = Number(testForm.dataset.editTestIndex);
+
+        if (editIndex >= 0 && activeCourse.tests?.[editIndex]) {
+          activeCourse.tests[editIndex] = testData;
+        } else {
+          activeCourse.tests = activeCourse.tests || [];
+          activeCourse.tests.push(testData);
+        }
+
+        saveCourses();
+        resetTestForm();
+      });
+
+      examForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const activeCourse = getActiveCourse();
+        if (!activeCourse) {
+          alert("Please select a course first.");
+          return;
+        }
+
+        const title = document.getElementById("examTitle").value.trim();
+        const instructions = document.getElementById("examInstructions").value.trim();
+        const passingScore = Number(document.getElementById("examScore").value) || 60;
+        const questions = document.getElementById("examQuestions").value.split(/\n/).map((q) => q.trim()).filter(Boolean);
+
+        if (!title) return;
+
+        const examData = { title, instructions, passingScore, questions };
+        const editIndex = Number(examForm.dataset.editExamIndex);
+
+        if (editIndex >= 0 && activeCourse.exams?.[editIndex]) {
+          activeCourse.exams[editIndex] = examData;
+        } else {
+          activeCourse.exams = activeCourse.exams || [];
+          activeCourse.exams.push(examData);
+        }
+
+        saveCourses();
+        resetExamForm();
+      });
+
+      function getActiveCourse() {
+        if (currentCourseIndex < 0 || !courses[currentCourseIndex]) {
+          return null;
+        }
+        return courses[currentCourseIndex];
+      }
+
+      function selectCourse(index) {
+        currentCourseIndex = index;
+        populateCourseSelector();
+      }
+
+      function editCourse(index) {
+        const course = courses[index];
+        if (!course) return;
+
+        document.getElementById("courseTitle").value = course.title;
+        document.getElementById("courseCategory").value = course.category;
+        document.getElementById("courseDescription").value = course.description || "";
+        courseForm.dataset.editIndex = index;
+        selectCourse(index);
+        document.getElementById("courseTitle").focus();
+      }
+
+      function deleteCourse(index) {
+        courses.splice(index, 1);
+        if (currentCourseIndex >= courses.length) {
+          currentCourseIndex = Math.max(courses.length - 1, -1);
+        }
+        saveCourses();
+      }
+
+      function editLesson(courseIndex, lessonIndex) {
+        const course = courses[courseIndex];
+        if (!course || !course.lessons?.[lessonIndex]) return;
+        selectCourse(courseIndex);
+        const lesson = course.lessons[lessonIndex];
+        document.getElementById("lessonTitle").value = lesson.title || "";
+        document.getElementById("lessonContent").value = lesson.content || "";
+        document.getElementById("lessonVideoUrl").value = lesson.videoUrl || "";
+        lessonForm.dataset.editLessonIndex = lessonIndex;
+      }
+
+      function removeLesson(courseIndex, lessonIndex) {
+        if (!courses[courseIndex]?.lessons) return;
+        courses[courseIndex].lessons.splice(lessonIndex, 1);
+        saveCourses();
+      }
+
+      function editTest(courseIndex, testIndex) {
+        const course = courses[courseIndex];
+        if (!course || !course.tests?.[testIndex]) return;
+        selectCourse(courseIndex);
+        const test = course.tests[testIndex];
+        document.getElementById("testTitle").value = test.title || "";
+        document.getElementById("testQuestion").value = test.question || "";
+        document.getElementById("testOptions").value = (test.options || []).join(", ");
+        document.getElementById("testAnswer").value = test.answer || "";
+        testForm.dataset.editTestIndex = testIndex;
+      }
+
+      function removeTest(courseIndex, testIndex) {
+        if (!courses[courseIndex]?.tests) return;
+        courses[courseIndex].tests.splice(testIndex, 1);
+        saveCourses();
+      }
+
+      function editExam(courseIndex, examIndex) {
+        const course = courses[courseIndex];
+        if (!course || !course.exams?.[examIndex]) return;
+        selectCourse(courseIndex);
+        const exam = course.exams[examIndex];
+        document.getElementById("examTitle").value = exam.title || "";
+        document.getElementById("examInstructions").value = exam.instructions || "";
+        document.getElementById("examScore").value = exam.passingScore || 60;
+        document.getElementById("examQuestions").value = (exam.questions || []).join("\n");
+        examForm.dataset.editExamIndex = examIndex;
+      }
+
+      function removeExam(courseIndex, examIndex) {
+        if (!courses[courseIndex]?.exams) return;
+        courses[courseIndex].exams.splice(examIndex, 1);
+        saveCourses();
+      }
+
+      courseSelector.addEventListener("change", function () {
+        currentCourseIndex = Number(courseSelector.value);
+      });
+
+      window.editCourse = editCourse;
+      window.deleteCourse = deleteCourse;
+      window.selectCourse = selectCourse;
+      window.editLesson = editLesson;
+      window.removeLesson = removeLesson;
+      window.editTest = editTest;
+      window.removeTest = removeTest;
+      window.editExam = editExam;
+      window.removeExam = removeExam;
+
+      renderCourses();
+    </script>
+  </body>
+</html>

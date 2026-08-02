@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        color: #00ff99;
+        min-height: 100vh;
+        overflow: hidden;
+        background: #000;
+      }
+
+      #matrix-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.7;
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: rgba(8, 8, 8, 0.95);
+        border-right: 1px solid rgba(0, 255, 153, 0.3);
+        padding: 24px 16px;
+      }
+
+      .sidebar h2 {
+        font-size: 20px;
+        margin-bottom: 16px;
+      }
+
+      .sidebar a {
+        display: block;
+        color: #7dffd1;
+        text-decoration: none;
+        padding: 10px 12px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        border: 1px solid transparent;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        background: rgba(0, 255, 153, 0.12);
+        border-color: rgba(0, 255, 153, 0.3);
+        color: #00ff99;
+      }
+
+      .content {
+        flex: 1;
+        padding: 24px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(8, 8, 8, 0.86);
+        border: 1px solid rgba(0, 255, 153, 0.3);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 0 24px rgba(0, 255, 153, 0.2);
+        backdrop-filter: blur(6px);
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: 28px;
+      }
+
+      p {
+        color: #7dffd1;
+        margin-bottom: 20px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        padding: 14px;
+        border-radius: 14px;
+        background: rgba(0, 255, 153, 0.08);
+        border: 1px solid rgba(0, 255, 153, 0.2);
+      }
+
+      .stat-card .label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #7dffd1;
+      }
+
+      .stat-card .value {
+        font-size: 22px;
+        font-weight: 700;
+        margin-top: 6px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 20px;
+      }
+
+      .panel {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(0,255,153,0.2);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .panel h2 {
+        margin-bottom: 10px;
+      }
+
+      .panel ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .panel li {
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(0, 255, 153, 0.06);
+        border: 1px solid rgba(0,255,153,0.16);
+      }
+
+      .course-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .course-meta {
+        color: #7dffd1;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+
+      .certificate-badge {
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        background: rgba(0,255,153,0.14);
+        color: #00ff99;
+        border: 1px solid rgba(0,255,153,0.2);
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      .btn-row a {
+        text-decoration: none;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #00ff99;
+        color: #000;
+        font-weight: 700;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="page">
+      <aside class="sidebar">
+        <h2>Cyber Nuxes</h2>
+        <a href="student-dashboard.html" class="active">Student Dashboard</a>
+        <a href="student-learning.html">My Lessons</a>
+        <a href="login.html">Logout</a>
+      </aside>
+
+      <div class="content">
+        <div class="container">
+          <h1>Welcome Back, Student</h1>
+          <p>Your learning progress, assignments, and upcoming assessments are summarized here.</p>
+
+          <div class="stats">
+            <div class="stat-card">
+              <div class="label">Lessons Completed</div>
+              <div class="value" id="lessonsCompleted">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">Tests Taken</div>
+              <div class="value" id="testsTaken">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">Exams Pending</div>
+              <div class="value" id="examsPending">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">Average Score</div>
+              <div class="value" id="averageScore">0%</div>
+            </div>
+          </div>
+
+          <div class="grid">
+            <section class="panel">
+              <h2>Recent Learning Activity</h2>
+              <ul id="activityList"></ul>
+            </section>
+
+            <section class="panel">
+              <h2>Available Courses</h2>
+              <ul id="courseList"></ul>
+            </section>
+          </div>
+
+          <div class="grid" style="margin-top: 20px;">
+            <section class="panel">
+              <h2>Available Certificates</h2>
+              <ul id="certificateList"></ul>
+            </section>
+
+            <section class="panel">
+              <h2>Quick Actions</h2>
+              <ul>
+                <li>Continue with your latest lesson</li>
+                <li>Review the newest test</li>
+                <li>Prepare for the next exam</li>
+              </ul>
+              <div class="btn-row">
+                <a href="student-learning.html">Open Learning Portal</a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const storedCourses = JSON.parse(localStorage.getItem("cyberNuxesCourses") || "[]");
+      const totalLessons = storedCourses.reduce((sum, course) => sum + (course.lessons || []).length, 0);
+      const totalTests = storedCourses.reduce((sum, course) => sum + (course.tests || []).length, 0);
+      const totalExams = storedCourses.reduce((sum, course) => sum + (course.exams || []).length, 0);
+
+      document.getElementById("lessonsCompleted").textContent = Math.min(totalLessons, 4);
+      document.getElementById("testsTaken").textContent = Math.min(totalTests, 2);
+      document.getElementById("examsPending").textContent = Math.max(totalExams, 1);
+      document.getElementById("averageScore").textContent = "82%";
+
+      const activityList = document.getElementById("activityList");
+      const courseList = document.getElementById("courseList");
+      const certificateList = document.getElementById("certificateList");
+      const canvas = document.getElementById("matrix-canvas");
+      const ctx = canvas.getContext("2d");
+      const activities = [
+        "You started the latest cybersecurity lesson.",
+        "You completed a networking test.",
+        "You opened the newest exam briefing."
+      ];
+
+      activityList.innerHTML = activities.map((item) => `<li>${item}</li>`).join("");
+
+      if (!storedCourses.length) {
+        courseList.innerHTML = '<li>No courses are available yet.</li>';
+      } else {
+        courseList.innerHTML = storedCourses.map((course) => `
+          <li class="course-item">
+            <div>
+              <strong>${course.title}</strong>
+              <div class="course-meta">${course.category || "General"} • ${course.lessons?.length || 0} lessons • ${course.tests?.length || 0} tests</div>
+            </div>
+            <span>${course.exams?.length ? "Exam Ready" : "Basic"}</span>
+          </li>
+        `).join("");
+      }
+
+      const certificates = storedCourses.length ? storedCourses.slice(0, 2).map((course) => ({
+        title: `${course.title} Completion Certificate`,
+        courseTitle: course.title
+      })) : [];
+
+      if (!certificates.length) {
+        certificateList.innerHTML = '<li>No certificates are available yet.</li>';
+      } else {
+        certificateList.innerHTML = certificates.map((certificate) => `
+          <li class="course-item">
+            <div>
+              <strong>${certificate.title}</strong>
+              <div class="course-meta">Issued for ${certificate.courseTitle}</div>
+            </div>
+            <span class="certificate-badge">Ready</span>
+          </li>
+        `).join("");
+      }
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      const fontSize = 14;
+      const columns = Math.floor(window.innerWidth / fontSize);
+      const drops = Array.from({ length: columns }, () => Math.floor(Math.random() * window.innerHeight / fontSize));
+
+      function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#00ff99";
+        ctx.font = `${fontSize}px monospace`;
+
+        for (let i = 0; i < drops.length; i += 1) {
+          const text = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+          ctx.fillText(text, x, y);
+
+          if (y > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          } else {
+            drops[i] += 1;
+          }
+        }
+      }
+
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+      });
+
+      resizeCanvas();
+      setInterval(drawMatrix, 50);
+    </script>
+  </body>
+</html>

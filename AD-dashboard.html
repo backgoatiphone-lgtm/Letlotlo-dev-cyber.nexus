@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyber NexusDashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Orbitron", sans-serif;
+        background: #000000;
+        color: #00ff99;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      #matrix-canvas {
+        position: fixed;
+        inset: 0;
+        z-index: -3;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background: linear-gradient(90deg, rgba(0, 255, 153, 0.24), rgba(2, 2, 2, 0.2));
+        pointer-events: none;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 250px;
+        height: 100%;
+        padding: 25px;
+        background: rgba(10, 10, 10, 0.92);
+        backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(0, 255, 153, 0.4);
+        box-shadow: 0 0 40px rgba(0, 255, 153, 0.2);
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .logo h1 {
+        font-size: 32px;
+        color: #00ff99;
+        text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99, 0 0 40px #00ff99;
+        letter-spacing: 3px;
+      }
+
+      .logo span {
+        display: block;
+        margin-top: 8px;
+        font-size: 12px;
+        color: #66ffcc;
+        letter-spacing: 4px;
+      }
+
+      .nav-links {
+        list-style: none;
+      }
+
+      .nav-links li {
+        padding: 0;
+        margin-bottom: 10px;
+      }
+
+      .nav-links button {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(10, 10, 10, 0.85);
+        color: #00ff99;
+        border: 1px solid rgba(0, 255, 153, 0.35);
+        border-radius: 10px;
+        text-align: left;
+        cursor: pointer;
+        transition: 0.35s ease;
+        font-size: 14px;
+        font-family: "Orbitron", sans-serif;
+        letter-spacing: 1px;
+      }
+
+      .nav-links button:hover,
+      .nav-links li.active button {
+        background: rgba(0, 255, 153, 0.12);
+        border-color: #00ff99;
+        box-shadow: 0 0 18px rgba(0, 255, 153, 0.35);
+        transform: translateX(8px);
+      }
+
+      .main-content {
+        margin-left: 250px;
+        padding: 30px;
+        min-height: 100vh;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+      }
+
+      .search {
+        width: min(380px, 100%);
+        padding: 14px 18px;
+        background: #0a0a0a;
+        border: 1px solid #00ff99;
+        border-radius: 30px;
+        color: #00ff99;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .search::placeholder {
+        color: #00ff99;
+      }
+
+      .profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .avatar {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: #00ff99;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        box-shadow: 0 0 20px rgba(0, 255, 153, 0.5);
+      }
+
+      .hero {
+        margin-bottom: 24px;
+      }
+
+      .hero h2 {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
+
+      .hero p {
+        color: #83ffd0;
+      }
+
+      .globe-section {
+        margin-bottom: 24px;
+      }
+
+      .globe-layout {
+        display: flex;
+        gap: 20px;
+        align-items: stretch;
+      }
+
+      .globe-card {
+        flex: 1.5;
+      }
+
+      .network-panel {
+        width: 260px;
+        flex-shrink: 0;
+      }
+
+      .globe-card {
+        padding: 22px;
+        border-radius: 20px;
+        background: rgba(15, 15, 15, 0.9);
+        border: 1px solid rgba(0, 255, 153, 0.3);
+        box-shadow: 0 0 28px rgba(0, 255, 153, 0.15);
+      }
+
+      .globe-card h2 {
+        font-size: 18px;
+        margin-bottom: 6px;
+        color: #00ff99;
+      }
+
+      .globe-card .globe-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .globe-card .globe-meta {
+        text-align: right;
+        color: #7dffd1;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .globe-card p {
+        color: #7dffd1;
+        margin-bottom: 12px;
+        font-size: 13px;
+      }
+
+      .globe-card canvas {
+        width: 100%;
+        height: 420px;
+        display: block;
+        border-radius: 16px;
+        background: radial-gradient(circle at center, rgba(0, 255, 153, 0.12), rgba(2, 2, 2, 0.96));
+      }
+
+      .network-panel {
+        padding: 20px;
+        border-radius: 20px;
+        background: rgba(15, 15, 15, 0.9);
+        border: 1px solid rgba(0, 255, 153, 0.3);
+        box-shadow: 0 0 28px rgba(0, 255, 153, 0.15);
+      }
+
+      .network-panel h3 {
+        color: #00ff99;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .network-panel .signal {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        color: #7dffd1;
+        font-size: 13px;
+      }
+
+      .network-panel .signal:last-child {
+        border-bottom: none;
+      }
+
+      .network-panel .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #00ff99;
+        box-shadow: 0 0 10px #00ff99;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      .card {
+        position: relative;
+        padding: 22px;
+        border-radius: 18px;
+        background: rgba(15, 15, 15, 0.8);
+        border: 1px solid rgba(0, 255, 153, 0.35);
+        overflow: hidden;
+        box-shadow: 0 0 24px rgba(0, 255, 153, 0.15);
+        transition: 0.35s ease;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        left: -100%;
+        background: linear-gradient(90deg, rgba(0, 255, 153, 0.15), transparent);
+        transform: rotate(20deg);
+        transition: 0.6s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 0 32px rgba(0, 255, 153, 0.4);
+      }
+
+      .card:hover::before {
+        left: 120%;
+      }
+
+      .card .title {
+        margin-bottom: 12px;
+        color: #7dffd1;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 13px;
+      }
+
+      .card .value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #00ff99;
+        text-shadow: 0 0 10px #00ff99;
+      }
+
+      .card .status {
+        margin-top: 12px;
+        color: #7dffd1;
+        font-size: 13px;
+      }
+
+      .panels {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .panel {
+        padding: 20px;
+        border-radius: 18px;
+        background: rgba(15, 15, 15, 0.82);
+        border: 1px solid rgba(0, 255, 153, 0.3);
+        box-shadow: 0 0 20px rgba(0, 255, 153, 0.14);
+      }
+
+      .panel h2 {
+        margin-bottom: 16px;
+        font-size: 18px;
+        color: #00ff99;
+        text-shadow: 0 0 10px #00ff99;
+      }
+
+      .panel canvas {
+        width: 100%;
+        height: 260px;
+        display: block;
+      }
+
+      .alert {
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        font-size: 13px;
+      }
+
+      .alert.critical {
+        background: rgba(85, 0, 0, 0.75);
+        color: #ff7777;
+      }
+
+      .alert.warning {
+        background: rgba(85, 68, 0, 0.75);
+        color: #ffff77;
+      }
+
+      .alert.safe {
+        background: rgba(0, 85, 0, 0.75);
+        color: #77ff77;
+      }
+
+      .progress {
+        margin-bottom: 16px;
+      }
+
+      .progress span {
+        display: inline-block;
+        margin-bottom: 8px;
+        font-size: 13px;
+      }
+
+      .bar {
+        height: 12px;
+        background: #111;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .fill {
+        height: 100%;
+        background: #00ff99;
+        box-shadow: 0 0 10px #00ff99;
+      }
+
+      .timeline {
+        list-style: none;
+      }
+
+      .timeline li {
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(0, 255, 153, 0.15);
+        font-size: 14px;
+      }
+
+      .timeline li:last-child {
+        border-bottom: none;
+      }
+
+      @media (max-width: 920px) {
+        .sidebar {
+          position: static;
+          width: 100%;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid rgba(0, 255, 153, 0.4);
+        }
+
+        .main-content {
+          margin-left: 0;
+          padding: 20px;
+        }
+
+        .globe-layout {
+          flex-direction: column;
+        }
+
+        .network-panel {
+          width: 100%;
+        }
+
+        .panels {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="overlay"></div>
+
+    <aside class="sidebar">
+      <div class="logo">
+        <h1>Cyber Nuxes</h1>
+        <span>SOC Admin Panel </span>
+      </div>
+      <ul class="nav-links">
+        <li class="active"><button type="button" onclick="window.location.href='AD-dashboard.html'">Dashboard</button></li>
+        <li><button type="button" onclick="window.location.href='AD-incident-monitoring.html'">Incident Monitoring</button></li>
+        <li><button type="button" onclick="window.location.href='AD-Analytics.html'">Analytics</button></li>
+        <li><button type="button" onclick="window.location.href='AD-User-management.html'">User Management</button></li>
+        <li><button type="button" onclick="window.location.href='AD-Reports.html'">Reports</button></li>
+        <li><button type="button" onclick="window.location.href='AD-Administration.html'">Administrators</button></li>
+        <li><button type="button" onclick="window.location.href='AD-course-management.html'">Course Management</button></li>
+        <li><button type="button" id="logoutBtn">Logout</button></li>
+      </ul>
+    </aside>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = "login.html";
+          });
+        }
+      });
+    </script>
+
+    <main class="main-content">
+      <header class="header">
+        <input type="text" class="search" placeholder="Browse..." />
+        <div class="profile">
+          <div class="avatar">CS</div>
+          <span>Admin: L. Mokoena</span>
+        </div>
+      </header>
+
+      <section class="hero">
+        <h2>Welcome administrator to the Cyber Sentry SOC Admin Panel</h2>
+        <p>Monitor threats, review system health, and respond quickly to incidents.</p>
+      </section>
+
+      <section class="globe-section">
+        <div class="globe-layout">
+          <div class="globe-card">
+            <div class="globe-header">
+              <div>
+                <h2>Global Threat Mesh</h2>
+                <p>Packets and secure routes flowing across the network globe in real time.</p>
+              </div>
+              <div class="globe-meta" id="globeClock">--:--:--</div>
+            </div>
+            <canvas id="globeCanvas"></canvas>
+          </div>
+
+          <div class="network-panel">
+            <h3>Network Active</h3>
+            <div class="signal"><span>Core Gateway</span><span class="dot"></span></div>
+            <div class="signal"><span>Edge Nodes</span><span class="dot"></span></div>
+            <div class="signal"><span>Transit Links</span><span class="dot"></span></div>
+            <div class="signal"><span>Threat Sensors</span><span class="dot"></span></div>
+            <div class="signal"><span>Cloud Sync</span><span class="dot"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cards">
+        <article class="card">
+          <div class="title">CPU Usage</div>
+          <div class="value">79%</div>
+          <div class="status">Updated 1 min ago</div>
+        </article>
+        <article class="card">
+          <div class="title">System Load</div>
+          <div class="value">Stable</div>
+          <div class="status">Updated 5 mins ago</div>
+        </article>
+        <article class="card">
+          <div class="title">Threat Detection</div>
+          <div class="value">Active</div>
+          <div class="status">Updated 2 mins ago</div>
+        </article>
+        <article class="card">
+          <div class="title">Active Incidents</div>
+          <div class="value">12</div>
+          <div class="status">Online</div>
+        </article>
+      </section>
+
+      <section class="panels">
+        <article class="panel">
+          <h2>Network Activity</h2>
+          <canvas id="networkActivityChart"></canvas>
+        </article>
+        <article class="panel">
+          <h2>Threat Detection</h2>
+          <div class="alert critical">Critical threat detected in the perimeter network.</div>
+          <div class="alert warning">Warning: suspicious activity detected on the RDP channel.</div>
+          <div class="alert safe">System is secure. Firewall status is active and IDS is online.</div>
+        </article>
+      </section>
+
+      <section class="panels">
+        <article class="panel">
+          <h2>System Status</h2>
+          <div class="progress">
+            <span>CPU Usage</span>
+            <div class="bar"><div class="fill" style="width: 79%"></div></div>
+          </div>
+          <div class="progress">
+            <span>Memory Usage</span>
+            <div class="bar"><div class="fill" style="width: 65%"></div></div>
+          </div>
+          <div class="progress">
+            <span>Disk Usage</span>
+            <div class="bar"><div class="fill" style="width: 45%"></div></div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Recent Incidents</h2>
+          <ul class="timeline">
+            <li><strong>10:15 AM</strong> - Unauthorized login attempt detected.</li>
+            <li><strong>09:50 AM</strong> - Admin login recorded from a new workstation.</li>
+            <li><strong>09:30 AM</strong> - New device connected to the network.</li>
+            <li><strong>09:10 AM</strong> - Firewall rules updated successfully.</li>
+            <li><strong>08:45 AM</strong> - Suspicious network traffic flagged for review.</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      const matrixCanvas = document.getElementById("matrix-canvas");
+      const matrixCtx = matrixCanvas.getContext("2d");
+      let columns = 0;
+      let drops = [];
+
+      function resizeMatrix() {
+        matrixCanvas.width = window.innerWidth;
+        matrixCanvas.height = window.innerHeight;
+        columns = Math.floor(matrixCanvas.width / 20);
+        drops = Array(columns).fill(1);
+      }
+
+      function drawMatrix() {
+        matrixCtx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+        matrixCtx.fillStyle = "#00ff99";
+        matrixCtx.font = "20px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+          const text = String.fromCharCode(33 + Math.floor(Math.random() * 94));
+          matrixCtx.fillText(text, i * 20, drops[i] * 20);
+
+          if (drops[i] * 20 > matrixCanvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+
+      resizeMatrix();
+      setInterval(drawMatrix, 50);
+      window.addEventListener("resize", resizeMatrix);
+
+      const chartCanvas = document.getElementById("networkActivityChart");
+      const chartCtx = chartCanvas.getContext("2d");
+      const chartPoints = [];
+      const maxPoints = 24;
+
+      function resizeChart() {
+        chartCanvas.width = chartCanvas.parentElement.clientWidth - 32;
+        chartCanvas.height = 260;
+        drawChart();
+      }
+
+      function drawChart() {
+        chartCtx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+        chartCtx.strokeStyle = "rgba(0, 255, 153, 0.25)";
+        chartCtx.lineWidth = 1;
+
+        for (let y = 0; y <= 4; y++) {
+          const offset = (chartCanvas.height / 4) * y;
+          chartCtx.beginPath();
+          chartCtx.moveTo(0, offset);
+          chartCtx.lineTo(chartCanvas.width, offset);
+          chartCtx.stroke();
+        }
+
+        if (chartPoints.length < 2) {
+          return;
+        }
+
+        chartCtx.strokeStyle = "#00ff99";
+        chartCtx.lineWidth = 2.5;
+        chartCtx.beginPath();
+        chartPoints.forEach((point, index) => {
+          const x = (index / (chartPoints.length - 1)) * chartCanvas.width;
+          const y = chartCanvas.height - (point / 100) * chartCanvas.height;
+          if (index === 0) {
+            chartCtx.moveTo(x, y);
+          } else {
+            chartCtx.lineTo(x, y);
+          }
+        });
+        chartCtx.stroke();
+      }
+
+      function updateChart() {
+        const lastValue = chartPoints[chartPoints.length - 1] || 40;
+        const nextValue = Math.max(20, Math.min(95, lastValue + (Math.random() - 0.5) * 16));
+        chartPoints.push(nextValue);
+        if (chartPoints.length > maxPoints) {
+          chartPoints.shift();
+        }
+        drawChart();
+      }
+
+      resizeChart();
+      setInterval(updateChart, 700);
+      window.addEventListener("resize", resizeChart);
+
+      const globeCanvas = document.getElementById("globeCanvas");
+      const globeCtx = globeCanvas.getContext("2d");
+      let globeWidth = 0;
+      let globeHeight = 0;
+      const paths = Array.from({ length: 60 }, () => ({
+        progress: Math.random(),
+        speed: 0.0028 + Math.random() * 0.0022,
+        startLat: (Math.random() - 0.5) * 180,
+        startLon: (Math.random() - 0.5) * 360,
+        endLat: (Math.random() - 0.5) * 180,
+        endLon: (Math.random() - 0.5) * 360,
+        lift: -24 + Math.random() * 48,
+      }));
+
+      function resizeGlobe() {
+        const dpr = window.devicePixelRatio || 1;
+        globeWidth = globeCanvas.clientWidth;
+        globeHeight = globeCanvas.clientHeight;
+        globeCanvas.width = globeWidth * dpr;
+        globeCanvas.height = globeHeight * dpr;
+        globeCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function latLonToPoint(lat, lon, radius) {
+        const latRad = (lat * Math.PI) / 180;
+        const lonRad = (lon * Math.PI) / 180;
+        return {
+          x: Math.cos(latRad) * Math.cos(lonRad) * radius,
+          y: Math.sin(latRad) * radius,
+          z: Math.cos(latRad) * Math.sin(lonRad) * radius,
+        };
+      }
+
+      function rotatePoint(point) {
+        return point;
+      }
+
+      function projectPoint(point, radius) {
+        const perspective = 800;
+        const scale = perspective / (perspective + point.z + radius * 1.2);
+        return {
+          x: globeWidth / 2 + point.x * scale * 0.96,
+          y: globeHeight / 2 + point.y * scale * 0.96,
+          scale,
+        };
+      }
+
+      function drawGlobeFrame() {
+        const radius = Math.min(globeWidth, globeHeight) * 0.28;
+        const centerX = globeWidth / 2;
+        const centerY = globeHeight / 2;
+
+        const continents = [
+          {
+            points: [
+              [25, -130], [35, -120], [45, -110], [55, -95], [50, -80], [35, -70], [25, -60], [15, -75], [10, -95], [12, -118]
+            ]
+          },
+          {
+            points: [
+              [-10, -80], [-5, -70], [0, -60], [-5, -50], [-20, -40], [-35, -55], [-40, -75], [-25, -80], [-20, -100]
+            ]
+          },
+          {
+            points: [
+              [55, -10], [60, 0], [58, 20], [50, 20], [45, 10], [48, -5]
+            ]
+          },
+          {
+            points: [
+              [20, -20], [10, -10], [5, 10], [-5, 20], [-15, 20], [-20, 15], [-25, 10], [-20, -5], [-10, -20], [5, -30], [15, -35]
+            ]
+          },
+          {
+            points: [
+              [60, 70], [45, 70], [25, 90], [15, 100], [10, 120], [20, 140], [35, 135], [45, 125], [55, 120], [65, 110], [70, 95], [70, 80]
+            ]
+          },
+          {
+            points: [
+              [-20, 115], [-10, 125], [0, 140], [-10, 150], [-25, 145], [-30, 130]
+            ]
+          },
+          {
+            points: [
+              [-70, -180], [-75, -120], [-80, -70], [-80, -20], [-75, 30], [-70, 90], [-60, 160], [-65, 180]
+            ]
+          }
+        ];
+
+        const glow = globeCtx.createRadialGradient(centerX, centerY, radius * 0.35, centerX, centerY, radius * 1.4);
+        glow.addColorStop(0, "rgba(0, 255, 153, 0.16)");
+        glow.addColorStop(1, "rgba(0, 255, 153, 0)");
+        globeCtx.fillStyle = glow;
+        globeCtx.beginPath();
+        globeCtx.arc(centerX, centerY, radius * 1.42, 0, Math.PI * 2);
+        globeCtx.fill();
+
+        globeCtx.save();
+        globeCtx.strokeStyle = "rgba(102, 255, 204, 0.22)";
+        globeCtx.lineWidth = 1;
+        globeCtx.lineCap = "round";
+
+        for (let lat = -80; lat <= 80; lat += 20) {
+          globeCtx.beginPath();
+          let firstPoint = true;
+          for (let lon = -180; lon <= 180; lon += 10) {
+            const point = rotatePoint(latLonToPoint(lat, lon, radius));
+            const projected = projectPoint(point, radius);
+            if (firstPoint) {
+              globeCtx.moveTo(projected.x, projected.y);
+              firstPoint = false;
+            } else {
+              globeCtx.lineTo(projected.x, projected.y);
+            }
+          }
+          globeCtx.stroke();
+        }
+
+        for (let lon = -180; lon <= 180; lon += 20) {
+          globeCtx.beginPath();
+          let firstPoint = true;
+          for (let lat = -80; lat <= 80; lat += 10) {
+            const point = rotatePoint(latLonToPoint(lat, lon, radius));
+            const projected = projectPoint(point, radius);
+            if (firstPoint) {
+              globeCtx.moveTo(projected.x, projected.y);
+              firstPoint = false;
+            } else {
+              globeCtx.lineTo(projected.x, projected.y);
+            }
+          }
+          globeCtx.stroke();
+        }
+        globeCtx.restore();
+
+        globeCtx.beginPath();
+        globeCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        globeCtx.strokeStyle = "rgba(0, 255, 153, 0.7)";
+        globeCtx.lineWidth = 2;
+        globeCtx.stroke();
+
+        continents.forEach((continent) => {
+          const points = continent.points.map(([lat, lon]) => {
+            const point = rotatePoint(latLonToPoint(lat, lon, radius * 0.94));
+            return projectPoint(point, radius);
+          });
+
+          if (points.length < 2) return;
+
+          globeCtx.beginPath();
+          points.forEach((point, index) => {
+            if (index === 0) {
+              globeCtx.moveTo(point.x, point.y);
+            } else {
+              globeCtx.lineTo(point.x, point.y);
+            }
+          });
+          globeCtx.closePath();
+          globeCtx.fillStyle = "rgba(8, 120, 80, 0.65)";
+          globeCtx.fill();
+          globeCtx.strokeStyle = "rgba(120, 255, 190, 0.35)";
+          globeCtx.lineWidth = 1;
+          globeCtx.stroke();
+        });
+
+        paths.forEach((path) => {
+          path.progress += path.speed;
+          if (path.progress > 1) {
+            path.progress = 0;
+            path.startLat = path.endLat;
+            path.startLon = path.endLon;
+            path.endLat = (Math.random() - 0.5) * 180;
+            path.endLon = (Math.random() - 0.5) * 360;
+            path.lift = -24 + Math.random() * 48;
+          }
+
+          const startPoint = rotatePoint(latLonToPoint(path.startLat, path.startLon, radius * 1.04));
+          const endPoint = rotatePoint(latLonToPoint(path.endLat, path.endLon, radius * 1.04));
+          const midLat = (path.startLat + path.endLat) / 2 + Math.sin(path.progress * Math.PI * 2) * 26;
+          const midLon = (path.startLon + path.endLon) / 2 + Math.cos(path.progress * Math.PI * 2) * 32;
+          const midPoint = rotatePoint(latLonToPoint(midLat, midLon, radius * 1.12));
+
+          const startP = projectPoint(startPoint, radius);
+          const endP = projectPoint(endPoint, radius);
+          const midP = projectPoint(midPoint, radius);
+
+          globeCtx.strokeStyle = "rgba(0, 255, 153, 0.6)";
+          globeCtx.lineWidth = 1.4;
+          globeCtx.lineCap = "round";
+          globeCtx.beginPath();
+          globeCtx.moveTo(startP.x, startP.y);
+          globeCtx.quadraticCurveTo(midP.x + path.lift * 0.4, midP.y + path.lift * 0.3, endP.x, endP.y);
+          globeCtx.stroke();
+
+          const packetT = path.progress;
+          const curveX = (1 - packetT) * (1 - packetT) * startP.x + 2 * (1 - packetT) * packetT * midP.x + packetT * packetT * endP.x;
+          const curveY = (1 - packetT) * (1 - packetT) * startP.y + 2 * (1 - packetT) * packetT * midP.y + packetT * packetT * endP.y;
+          const curveLiftX = (1 - packetT) * (1 - packetT) * startP.x + 2 * (1 - packetT) * packetT * (midP.x + path.lift * 0.4) + packetT * packetT * endP.x;
+          const curveLiftY = (1 - packetT) * (1 - packetT) * startP.y + 2 * (1 - packetT) * packetT * (midP.y + path.lift * 0.3) + packetT * packetT * endP.y;
+
+          globeCtx.beginPath();
+          globeCtx.arc(curveLiftX, curveLiftY, 3, 0, Math.PI * 2);
+          globeCtx.fillStyle = "#ffffff";
+          globeCtx.fill();
+          globeCtx.beginPath();
+          globeCtx.arc(curveLiftX, curveLiftY, 5.2, 0, Math.PI * 2);
+          globeCtx.strokeStyle = "rgba(255,255,255,0.22)";
+          globeCtx.stroke();
+        });
+      }
+
+      function animateGlobe() {
+        globeCtx.clearRect(0, 0, globeWidth, globeHeight);
+        drawGlobeFrame();
+        requestAnimationFrame(animateGlobe);
+      }
+
+      resizeGlobe();
+      animateGlobe();
+      window.addEventListener("resize", resizeGlobe);
+
+      function updateGlobeClock() {
+        const clockEl = document.getElementById("globeClock");
+        if (!clockEl) return;
+
+        const now = new Date();
+        const time = now.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false
+        });
+        const date = now.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        });
+
+        clockEl.innerHTML = `${time}<br>${date}`;
+      }
+
+      updateGlobeClock();
+      setInterval(updateGlobeClock, 1000);
+
+    </script>
+  </body>
+</html>

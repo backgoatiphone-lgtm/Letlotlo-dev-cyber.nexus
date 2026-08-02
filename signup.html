@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyber Nuxes Sign Up</title>
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #020202, #0f2f24);
+        color: #00ff99;
+        padding: 20px;
+      }
+
+      .card {
+        width: min(460px, 94vw);
+        padding: 28px;
+        border-radius: 18px;
+        background: rgba(10, 10, 10, 0.92);
+        border: 1px solid rgba(0, 255, 153, 0.3);
+        box-shadow: 0 0 24px rgba(0, 255, 153, 0.2);
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: 24px;
+      }
+
+      p {
+        margin-bottom: 20px;
+        color: #7dffd1;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 14px;
+      }
+
+      input {
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 255, 153, 0.4);
+        background: #0a0a0a;
+        color: #fff;
+      }
+
+      button {
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background: #00ff99;
+        color: #000;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .footer-link {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #7dffd1;
+      }
+
+      .footer-link a {
+        color: #00ff99;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Create Student Account</h1>
+      <p>Register a new account to access the Cyber Nuxes portal.</p>
+      <form id="signupForm">
+        <label>
+          Full Name
+          <input type="text" id="fullName" placeholder="Enter your full name" required />
+        </label>
+        <label>
+          Username
+          <input type="text" id="username" placeholder="Choose a username" required />
+        </label>
+        <label>
+          Email
+          <input type="email" id="email" placeholder="Enter your email" required />
+        </label>
+        <label>
+          Password
+          <input type="password" id="password" placeholder="Create a password" required />
+        </label>
+        <label>
+          Confirm Password
+          <input type="password" id="confirmPassword" placeholder="Confirm your password" required />
+        </label>
+        <button type="submit">Create Account</button>
+      </form>
+      <div class="footer-link">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+    </div>
+
+    <script>
+      const signupForm = document.getElementById("signupForm");
+
+      signupForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const fullName = document.getElementById("fullName").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (password !== confirmPassword) {
+          alert("Passwords do not match.");
+          return;
+        }
+
+        const storageKey = "cyberNuxesUsers";
+        const storedUsers = JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+        if (storedUsers.some((user) => user.username.toLowerCase() === username.toLowerCase())) {
+          alert("That username already exists. Please choose another one.");
+          return;
+        }
+
+        storedUsers.push({ fullName, username, email, password });
+        localStorage.setItem(storageKey, JSON.stringify(storedUsers));
+        window.location.href = "login.html?signup=success";
+      });
+    </script>
+  </body>
+</html>

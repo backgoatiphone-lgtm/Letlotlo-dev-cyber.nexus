@@ -1,0 +1,199 @@
+:root {
+  --panel-padding: clamp(12px, 2vw, 18px);
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+img,
+video,
+iframe,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+  min-width: 0;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+.page {
+  flex-wrap: wrap;
+}
+
+.sidebar {
+  min-width: 0;
+}
+
+.content {
+  min-width: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  padding: clamp(14px, 2.2vw, 24px);
+}
+
+.panel,
+.stat-card,
+.analytics-card,
+.card,
+.course-item,
+.item-row {
+  width: 100%;
+}
+
+.grid,
+.layout,
+.stats,
+.analytics-grid {
+  gap: 14px;
+}
+
+@media (max-width: 1100px) {
+  .grid,
+  .layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stats,
+  .analytics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 153, 0.25);
+    padding: 14px 12px;
+  }
+
+  .sidebar a,
+  .sidebar button {
+    display: inline-block;
+    width: auto;
+    margin: 4px 6px 4px 0;
+    text-align: center;
+  }
+
+  .content {
+    padding: 12px;
+  }
+
+  .container {
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .main-content {
+    padding: 14px !important;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+
+  .panels,
+  .globe-layout,
+  .network-panel {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
+  .content {
+    padding: 8px;
+  }
+
+  .container {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .sidebar h2 {
+    font-size: 1.1rem;
+  }
+
+  .sidebar a,
+  .sidebar button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 4px 0;
+  }
+
+  .stats,
+  .analytics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .panel,
+  .stat-card,
+  .analytics-card,
+  .card {
+    padding: 12px;
+  }
+
+  .course-item,
+  .item-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-row,
+  .actions {
+    flex-direction: column;
+  }
+
+  .btn-row a,
+  .btn-row button,
+  .submit-btn,
+  .download-btn,
+  button {
+    width: 100%;
+  }
+
+  .card h3,
+  .panel h2,
+  h1 {
+    font-size: 1.15rem;
+  }
+
+  .tutorial-box iframe {
+    min-height: 220px;
+  }
+}
