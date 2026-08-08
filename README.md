@@ -23,11 +23,6 @@ username: admin
 password: admin123
 ```
 
-for the user end
-
-```text
-username: student-example
-password: passwd
-```
+for the user end please create a new profile and re-login
 
 Please leave a comment on how the website is and way your in sights
