@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="responsive.css" />
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Orbitron", sans-serif;
+            background: #020202;
+            color: #00ff99;
+            min-height: 100vh;
+        }
+
+        .page {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            padding: 24px 18px;
+            background: rgba(10, 10, 10, 0.95);
+            border-right: 1px solid rgba(0, 255, 153, 0.35);
+            box-shadow: 0 0 30px rgba(0, 255, 153, 0.2);
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 10px #00ff99;
+        }
+
+        .sidebar p {
+            color: #66ffcc;
+            font-size: 12px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .sidebar button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 12px 14px;
+            background: rgba(10, 10, 10, 0.85);
+            color: #00ff99;
+            border: 1px solid rgba(0, 255, 153, 0.35);
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-family: "Orbitron", sans-serif;
+        }
+    </style>
+    <title>About Us - Cyber Sentry</title>
+</head>
+<body>
+    <div class="page">
+        <div class="sidebar">
+            <h2>Cyber Sentry</h2>
+            <p>About Us</p>
+            <button onclick="window.location.href='student-dashboard.html'">Home</button>
+            <button onclick="window.location.href='student-learning.html'">Learning</button>
+            <button onclick="window.location.href='student-center.html'" class="active">Student Center</button>
+        </div>
+        <div class="content" style="padding: 24px; flex: 1;">
+            <h1>About Cyber Sentry</h1>
+            <p>Cyber Sentry is a leading provider of cybersecurity solutions, dedicated to protecting businesses and individuals from digital threats. Our team of experts specializes in advanced threat detection, risk assessment, and security management.</p>
+            <p>With years of experience in the cybersecurity industry, we have developed innovative tools and strategies to safeguard sensitive information and ensure the integrity of our clients' digital assets.</p>
+            <p>Our mission is to empower organizations to operate securely in an increasingly complex digital landscape, providing peace of mind and confidence in their cybersecurity posture.</p>
+        </div>
+    
